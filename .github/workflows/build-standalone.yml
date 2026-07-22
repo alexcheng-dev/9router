@@ -1,0 +1,33 @@
+name: Build standalone
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  build-standalone:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm run build
+      - name: Package standalone
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          mkdir -p dist/.next/standalone/.next
+          cp -R .next/standalone/* dist/.next/standalone/
+          cp -R .next/static dist/.next/standalone/.next/static
+          cp -R public dist/.next/standalone/public
+          cp package.json dist/package.json
+          tar -czf 9router-standalone.tgz -C dist .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 9router-standalone
+          path: 9router-standalone.tgz
+          retention-days: 14
