@@ -20,7 +20,7 @@ jobs:
           set -euo pipefail
           rm -rf dist
           mkdir -p dist/.next/standalone/.next
-          cp -R .next/standalone/* dist/.next/standalone/
+          cp -R .next/standalone/. dist/.next/standalone/
           cp -R .next/static dist/.next/standalone/.next/static
           cp -R public dist/.next/standalone/public
           cp package.json dist/package.json
